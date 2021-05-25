@@ -173,6 +173,11 @@
             <defaultValue>n</defaultValue>
             <validationRegex>^(y|n)$</validationRegex>
         </requiredProperty>  
+
+        <!--
+            Maven Archetype Version variable
+        -->
+        <requiredProperty key="archetypeVersion" />
     </requiredProperties>
 
     <modules>
