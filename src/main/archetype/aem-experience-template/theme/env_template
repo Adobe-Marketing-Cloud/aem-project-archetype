@@ -1,0 +1,8 @@
+# AEM url
+AEM_URL=<site URL>
+
+# AEM site name
+AEM_SITE=<site name>
+
+# AEM proxy port
+AEM_PROXY_PORT=7000

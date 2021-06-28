@@ -1,0 +1,86 @@
+# Creates a Site Template Release 
+
+name: Build and release Site Template
+
+on: 
+  workflow_dispatch:
+    inputs:
+      semantic_version:
+        description: 'Semantic version (major | minor | patch)'
+        required: true
+        default: 'patch'
+
+jobs:
+  build_and_release:
+    name: Build and release
+    runs-on: ubuntu-latest
+
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Set up Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      
+      - name: Install NPM dependencies
+        run: npm install
+
+      - name: Bump version and commit
+        run: |
+          git config --local user.email "${{ github.actor }}@users.noreply.github.com"
+          git config --local user.name "Release action on behalf of ${{ github.actor }}"
+          npm version ${{ github.event.inputs.semantic_version }} -m 'Release %s'
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+          tags: false 
+
+      - name: Build Site Template (using bumped version)
+        run: npm run build
+
+      - name: Read package.json
+        id: package
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./package.json
+
+      - name: Extract name and version from package.json
+        id: packageJson
+        run: |
+          echo ::set-output name=NAME::$(echo '${{ steps.package.outputs.content }}' | jq -r '.name')
+          echo ::set-output name=VERSION::$(echo '${{ steps.package.outputs.content }}' | jq -r '.version')
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.packageJson.outputs.VERSION }}
+          release_name: ${{ steps.packageJson.outputs.NAME }}-${{ steps.packageJson.outputs.VERSION }}
+          draft: false
+          prerelease: true
+      
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} 
+          asset_path: ./${{ steps.packageJson.outputs.NAME }}-${{ steps.packageJson.outputs.VERSION }}.zip
+          asset_name: ${{ steps.packageJson.outputs.NAME }}-${{ steps.packageJson.outputs.VERSION }}.zip
+          asset_content_type: application/zip
+          
+      - name: Update Site Theme E2E Repo
+        run: |
+          curl -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token ${{ secrets.SITE_THEME_REPO_WRITE_TOKEN }}" \
+            --request POST \
+            --data '{"event_type": "fetch_latest_changes", "client_payload": { "site_template_version": "${{ steps.packageJson.outputs.VERSION }}" } }' \
+            ${{ github.api_url }}/repos/adobe/ez-aem-site-template-minimal-theme-e2e/dispatches

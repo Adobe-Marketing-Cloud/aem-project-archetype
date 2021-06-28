@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:deviceGroups="[mobile/groups/responsive]"
+        cq:template="/conf/${appId}-template/settings/wcm/templates/page-content"
+        jcr:primaryType="cq:PageContent"
+        sling:resourceType="${appId}/components/page">
+        <root
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="${appId}/components/container"
+            layout="responsiveGrid">
+            <experiencefragment-header
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="${appId}/components/experiencefragment"
+                fragmentVariationPath="/content/experience-fragments/${appId}-template/us/en/site/header/master"/>
+            <container
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="${appId}/components/container"
+                layout="responsiveGrid">
+                <title
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="${appId}/components/title"
+                    editable="{Boolean}true"/>
+                <container
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="${appId}/components/container"
+                    editable="{Boolean}true"
+                    layout="responsiveGrid"/>
+            </container>
+            <experiencefragment-footer
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="${appId}/components/experiencefragment"
+                fragmentVariationPath="/content/experience-fragments/${appId}-template/us/en/site/footer/master"/>
+        </root>
+        <cq:responsive jcr:primaryType="nt:unstructured">
+            <breakpoints jcr:primaryType="nt:unstructured">
+                <phone
+                    jcr:primaryType="nt:unstructured"
+                    title="Smaller Screen"
+                    width="{Long}768"/>
+                <tablet
+                    jcr:primaryType="nt:unstructured"
+                    title="Tablet"
+                    width="{Long}1200"/>
+            </breakpoints>
+        </cq:responsive>
+    </jcr:content>
+</jcr:root>

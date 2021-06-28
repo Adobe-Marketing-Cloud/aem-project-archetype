@@ -106,6 +106,15 @@ removeModule(rootPom, 'dispatcher.ams')
 assert new File(rootDir, 'dispatcher.cloud').deleteDir()
 removeModule(rootPom, 'dispatcher.cloud')
 
+if (includeExperienceTemplate == "n") {
+    assert new File(rootDir, "aem-experience-template").deleteDir()
+    assert new File(rootDir, "README-EXPERIENCE-TEMPLATE.md").delete()
+    removeModule(rootPom, 'aem-experience-template')
+} else {
+    // Experience Templates should be used to create sites if enabled. ui.content module not needed.
+    removeModule(rootPom, 'ui.content')
+}
+
 if (includeCommerce == "n") {
     assert new File(rootDir, "README-CIF.md").delete()
     assert new File("$appsFolder/components/commerce").deleteDir()

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workspaceFilter version="1.0">
+    <filter root="/conf/${appId}-template" mode="merge"/>
+    <filter root="/content/${appId}-template" mode="merge"/>
+    <filter root="/content/dam/${appId}-template" mode="merge"/>
+    <filter root="/content/experience-fragments/${appId}-template" mode="merge"/>
+</workspaceFilter>

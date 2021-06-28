@@ -53,6 +53,9 @@
         <module>ui.frontend.angular</module>
         <module>ui.frontend.react</module>
         <module>ui.tests</module>
+#if ( $includeExperienceTemplate == "y" )
+        <module>aem-experience-template</module>
+#end
     </modules>
 
     <properties>

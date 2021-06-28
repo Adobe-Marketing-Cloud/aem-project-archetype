@@ -1,0 +1,24 @@
+{
+  "name": "${appId}-template",
+  "version": "0.0.1",
+  "description": "Minimal AEM Experience Template that serves as a clean starting point for ${appTitle}.",
+  "license": "MIT License, Copyright 2021 Adobe Systems Incorporated",
+  "scripts": {
+    "build": "aem-site-template-builder",
+    "deploy": "curl -u admin:admin -F file=@${appId}-template-latest.zip http://localhost:4502/conf/global/site-templates.import.html",
+    "undeploy": "curl -u admin:admin -F ':operation=delete' http://localhost:4502/conf/global/site-templates/${appId}-template-0.0.1"
+  },
+  "devDependencies": {
+    "@adobe/aem-site-template-builder": "2.1.3",
+    "fs-extra": "^10.0.0",
+    "ignore-walk": "^3.0.4"
+  },
+  "siteTemplate": {
+    "title": "Minimal AEM Experience Template for ${appTitle}",
+    "createdBy": "headwire.com, Inc",
+    "useCases": [],
+    "docsUrl": "",
+    "showcaseUrl": "",
+    "sourceRepositoryUrl": "https://github.com/ez-aem/aem-project-archetype"
+  }
+}

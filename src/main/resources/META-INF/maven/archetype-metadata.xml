@@ -182,6 +182,14 @@
             <validationRegex>^(y|n)$</validationRegex>
         </requiredProperty>
 
+        <!--
+            Option to include Experience Template
+            aem-experience-template directory.
+        -->
+        <requiredProperty key="includeExperienceTemplate">
+            <defaultValue>n</defaultValue>
+            <validationRegex>^(y|n)$</validationRegex>
+        </requiredProperty>
     </requiredProperties>
 
     <modules>
@@ -521,6 +529,7 @@
       <includes>
         <include>README.md</include>
         <include>README-CIF.md</include>
+        <include>README-EXPERIENCE-TEMPLATE.md</include>
         <include>.gitignore</include>
         <include>LICENSE</include>
       </includes>
@@ -529,6 +538,36 @@
       <directory></directory>
       <includes>
         <include>archetype.properties</include>
+      </includes>
+    </fileSet>
+    <fileSet filtered="true" packaged="false"
+              encoding="UTF-8">
+      <directory>aem-experience-template</directory>
+      <includes>
+          <include>**/*</include>
+      </includes>
+      <excludes>
+        <exclude>**/*.png</exclude>
+        <exclude>**/*.jpeg</exclude>
+        <exclude>**/image</exclude>
+        <exclude>**/original</exclude>
+        <exclude>**/*.xd</exclude>
+        <exclude>**/*.zip</exclude>
+      </excludes>
+    </fileSet>
+    <fileSet filtered="false" packaged="false"
+             encoding="UTF-8">
+      <directory>aem-experience-template</directory>
+      <includes>
+        <include>**/*.png</include>
+        <include>**/image</include>
+        <include>**/file</include>
+        <include>**/*.png</include>
+        <include>**/*.jpeg</include>
+        <include>**/image</include>
+        <include>**/original</include>
+        <include>**/*.xd</include>
+        <include>**/*.zip</include>
       </includes>
     </fileSet>
   </fileSets>

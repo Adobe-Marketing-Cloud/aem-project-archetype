@@ -1,0 +1,127 @@
+/*
+* ADOBE CONFIDENTIAL
+*
+* Copyright 2020 Adobe Systems Incorporated
+* All Rights Reserved.
+*
+* NOTICE:  All information contained herein is, and remains
+* the property of Adobe Systems Incorporated and its suppliers,
+* if any.  The intellectual and technical concepts contained
+* herein are proprietary to Adobe Systems Incorporated and its
+* suppliers and may be covered by U.S. and Foreign Patents,
+* patents in process, and are protected by trade secret or copyright law.
+* Dissemination of this information or reproduction of this material
+* is strictly forbidden unless prior written permission is obtained
+* from Adobe Systems Incorporated.
+*/
+
+/* grid component */
+.aem-Grid {
+    display: block;
+    width: 100%;
+}
+
+.aem-Grid::before,
+.aem-Grid::after {
+    display: table;
+    content: " ";
+}
+
+.aem-Grid::after {
+    clear: both;
+}
+
+/* placeholder for new components */
+.aem-Grid-newComponent {
+    clear: both;
+    margin: 0;
+}
+
+/* column of a grid */
+.aem-GridColumn {
+    box-sizing: border-box;
+    clear: both;
+}
+
+/* force showing hidden */
+.aem-GridShowHidden > .aem-Grid > .aem-GridColumn {
+        display: block !important;
+}
+
+/* force showing hidden components in unhide mode */
+.aem-GridShowHidden > .cmp-container > .aem-Grid > .aem-GridColumn {
+    display: block !important;
+}
+
+/* Generates all the rules for the grid columns up to the given amount of column */
+@mixin generate-columns($breakPoint, $columnTotal, $column: 1) {
+    @if ($column <= $columnTotal) {
+        
+        & > .aem-GridColumn.aem-GridColumn--#{$breakPoint}--#{$column} {
+            float: left;
+            clear: none;
+            width: ($column * 100% / $columnTotal);
+        }
+
+        @include generate-columns($breakPoint, $columnTotal, ($column + 1));
+    }
+}
+
+/* Generates all the rules for the grid column offset up to the given amount of column */
+@mixin generate-offsets($breakPoint, $columnTotal, $column: 0) {
+    @if ($column <= $columnTotal) {
+
+        & > .aem-GridColumn.aem-GridColumn--offset--#{$breakPoint}--#{$column} {
+            margin-left: ($column * 100% / $columnTotal);
+        }
+
+        @include generate-offsets($breakPoint, $columnTotal, ($column + 1));
+    }
+}
+
+/* Generates all the rules for the grid and columns for the given break point and total of columns */
+@mixin generate-grid-columns($breakPoint, $columnTotal) {
+    @if ($columnTotal > 0) {
+
+        &.aem-Grid--#{$columnTotal} {
+            @include generate-columns($breakPoint, $columnTotal);
+            @include generate-offsets($breakPoint, $columnTotal);
+        }
+
+        &.aem-Grid--#{$breakPoint}--#{$columnTotal} {
+            @include generate-columns($breakPoint, $columnTotal);
+            @include generate-offsets($breakPoint, $columnTotal);
+        }
+    }
+}
+
+/* Generates all the rules for the grids and columns */
+@mixin grid-loop($breakPoint, $columnTotal, $column: 1) {
+    @if ($column <= $columnTotal) {
+        @include generate-grid-columns($breakPoint, $column);
+        @include grid-loop($breakPoint, $columnTotal, ($column + 1));
+    }
+}
+
+/* API function to be called to generate a grid config */
+@mixin generate-grid($breakPoint, $columnTotal) {
+    @include grid-loop($breakPoint, $columnTotal);
+
+    & > .aem-GridColumn.aem-GridColumn--#{$breakPoint}--newline {
+        /* newline behavior */
+        display: block;
+        clear: both !important;
+    }
+
+    & > .aem-GridColumn.aem-GridColumn--#{$breakPoint}--none {
+        /* none behavior */
+        display: block;
+        clear: none !important; // Prevent the clear:both effect of another breakpoint new line
+        float: left; // Enforce the float positioning to maintain the column height and position relative to previous columns
+    }
+
+    & > .aem-GridColumn.aem-GridColumn--#{$breakPoint}--hide {
+        /* hide behavior */
+        display: none;
+    }
+}

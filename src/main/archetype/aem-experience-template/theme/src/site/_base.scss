@@ -1,0 +1,39 @@
+
+//== Base
+
+html,
+body {
+    margin: 0;
+    font-size:   $font-size;
+    font-family: $font-family;
+    line-height: $font-height;
+    color:       $color-foreground;
+    background:  $color-background;
+}
+
+
+a {
+    color: $color-link;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+    font: inherit;
+}
+
+//== Grid
+
+// Default breakpoint
+.aem-Grid {
+    @include generate-grid(default, $max_col);
+}
+
+// Phone breakpoint
+@media (max-width: 768px) {
+    .aem-Grid {
+        @include generate-grid(phone, $max_col);
+    }
+}

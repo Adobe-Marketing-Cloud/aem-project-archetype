@@ -1,0 +1,37 @@
+name: Update theme config on AEM with artifact id
+
+on:
+  repository_dispatch:
+    types: update_theme_config
+
+jobs:
+  update_config:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install NPM dependencies
+        run: npm install
+
+      - name: Compute env vars
+        id: env_vars
+        run: |
+          echo ::set-output name=GIT_ARTIFACT_ID::$(curl ${{ github.api_url }}/repos/${{ github.repository }}/actions/runs/${{ github.event.client_payload.deployed_theme_run_id }}/artifacts -H 'Authorization: token ${{ secrets.GIT_TOKEN }}' | jq -r '.artifacts[0].id')
+          echo ::set-output name=GIT_ORG::$(echo "${{ github.repository }}" | awk -F / '{print $1}')
+          echo ::set-output name=GIT_REPO::$(echo "${{ github.repository }}" | awk -F / '{print $2}')
+          echo ::set-output name=GIT_HASH_EXPIRATION::$(date -d "+10 minutes" +%s000)
+
+      - name: Compute hash var
+        id: hash_var
+        run: |
+          echo ::set-output name=GIT_HASH::$(echo -n "${{ steps.env_vars.outputs.GIT_ORG }}${{ steps.env_vars.outputs.GIT_REPO }}${{ secrets.GIT_TOKEN }}${{ steps.env_vars.outputs.GIT_HASH_EXPIRATION }}" | shasum -a 256 | cut -d " " -f 1)
+
+      - name: Update theme path
+        env:
+          AEM_SITE: ${{ secrets.AEM_SITE }}
+          GIT_ARTIFACT_ID: ${{ steps.env_vars.outputs.GIT_ARTIFACT_ID }}
+          GIT_HASH_EXPIRATION: ${{ steps.env_vars.outputs.GIT_HASH_EXPIRATION }}
+          GIT_HASH: ${{ steps.hash_var.outputs.GIT_HASH }}
+          AEM_URL: ${{ secrets.AEM_URL }}
+        run: npx aem-site-theme-builder deploy
