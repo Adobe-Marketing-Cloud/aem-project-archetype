@@ -21,6 +21,28 @@ const tough = require('tough-cookie');
 
 const AEMSitesViewTypes = Object.freeze({'CARD': 'card', 'COLUMN': 'column', 'LIST': 'list'});
 
+// whitelist of console errors which are ignored during error check
+const ConsoleErrorWhiteList = [
+    {
+        type : 'error',
+        message : 'favicon.ico'
+    },
+    {
+        type : 'error',
+        message : 'http://dev.day.com/cq6.gif'
+    },
+    {
+        type : 'error',
+        // sometime an error is seen at etc.clientlibs/clientlibs/granite/lawnchair.js 386:32 'error in indexed-db adapter!'
+        message : 'error in indexed-db adapter!'
+    },
+    {
+        type : 'error',
+        // spectrum has SVG errors on cloud ready, hence filtering out that error for now
+        message : 'parsed SVG document contained something'
+    }
+];
+
 function takeScreenshot(browser, prefix) {
     prefix = prefix == null ? '' : prefix + '-';
     const timestamp = moment().format('YYYYMMDD-HHmmss.SSS');
@@ -65,6 +87,49 @@ function _getLoginCookies(browser) {
     );
 }
 
+function isErrorWhiteListed (consoleMsg) {
+    let isWhiteListed = true;
+    ConsoleErrorWhiteList.forEach(function (whiteListError) {
+        if (consoleMsg.indexOf(whiteListError.message) !== -1 ) {
+            isWhiteListed = true;
+        }else {
+            isWhiteListed = false;
+        }
+    });
+    return isWhiteListed;
+}
+
+function trackConsoleErrors(browser) {
+    let consoleErrors = [];
+    if (browser.capabilities.browserName === 'chrome') {
+        // switch to Puppeteer
+        let puppeteerBrowser = browser.getPuppeteer();
+        consoleErrors = browser.call(async () => {
+            let pages = await puppeteerBrowser.pages(),
+                errrorList = [];
+            pages[0].on('console', consoleMsg => {
+                // for each error check in whitelist if present
+                if(consoleMsg.type === 'error') {
+                    if (!isErrorWhiteListed(consoleMsg.text())) {
+                        errrorList.push(consoleMsg.text());
+                    }
+                }
+            });
+            pages[0].on('pageerror', error => {
+                // for each error check in whitelist if present
+                if (!isErrorWhiteListed(error.message)) {
+                    errrorList.push(error.message);
+                }
+            });
+
+            return errrorList;
+        });
+    }
+    return consoleErrors;
+}
+
+
+
 class OnboardingDialogHandler {
     constructor(browser) {
         this.browser = browser;
@@ -93,5 +158,6 @@ module.exports = {
     AEMSitesViewTypes: AEMSitesViewTypes,
     getAuthenticatedRequestOptions: getAuthenticatedRequestOptions,
     takeScreenshot: takeScreenshot,
-    OnboardingDialogHandler: OnboardingDialogHandler
+    OnboardingDialogHandler: OnboardingDialogHandler,
+    trackConsoleErrors: trackConsoleErrors
 };

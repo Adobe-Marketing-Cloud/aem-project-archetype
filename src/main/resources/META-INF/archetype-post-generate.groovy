@@ -8,6 +8,7 @@ def rootDir = new File(request.getOutputDirectory() + "/" + request.getArtifactI
 def uiAppsPackage = new File(rootDir, "ui.apps")
 def uiContentPackage = new File(rootDir, "ui.content")
 def uiConfigPackage = new File(rootDir, "ui.config")
+def uiTestPackage = new File(rootDir, "ui.tests")
 def coreBundle = new File(rootDir, "core")
 def rootPom = new File(rootDir, "pom.xml")
 def frontendModules = ["general", "angular", "react"]
@@ -168,6 +169,9 @@ if (includeForms == "n") {
     assert new File("$uiContentPackage/src/main/content/jcr_root/content/dam/formsanddocuments-themes").deleteDir()
     assert new File("$uiContentPackage/src/main/content/jcr_root/content/dam/$appId/sample_logo.png").deleteDir()
     assert new File("$uiContentPackage/src/main/content/jcr_root/content/dam/$appId/sample_terms.png").deleteDir()
+    assert new File("$uiTestPackage/test-module/specs/aem/forms.js").delete()
+    assert new File("$uiTestPackage/test-module/lib/util/forms.selectors.js").delete()
+
 } else {
     if (aemVersion == "cloud") {
         // if forms is included and aem version is set to cloud, set the forms sdk version
