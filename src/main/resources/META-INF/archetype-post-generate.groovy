@@ -126,6 +126,7 @@ if (includeCommerce == "n") {
     assert new File("$confFolder/settings/wcm/templates/landing-page").deleteDir()
     assert new File("$confFolder/settings/wcm/templates/product-page").deleteDir()
     assert new File("$confFolder/settings/wcm/templates/root-page").deleteDir()
+    assert new File("$confFolder/settings/wcm/templates/page-content/structure/jcr:content/root/header").deleteDir()
     assert new File("$contentFolder/language-masters/en/my-account").deleteDir()
     assert new File("$contentFolder/language-masters/en/products").deleteDir()
     assert new File("$contentFolder/language-masters/en/reset-password").deleteDir()
