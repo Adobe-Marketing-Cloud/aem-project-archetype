@@ -1,0 +1,8 @@
+{
+    "dir": "./src/main/webpack/static",
+    "index": "content/${appId}/us/en.html",
+    "pages": [
+        "content/${appId}/us/en.html",
+        "content/${appId}/us.html"
+    ]
+}
