@@ -247,11 +247,15 @@ def cleanUpFrontendModule(frontendModules, optionFrontendModule, rootPom, rootDi
 
         // Delete SPA templates
         assert new File("$confFolder/settings/wcm/templates/spa-app-template").deleteDir()
+        assert new File("$confFolder/settings/wcm/templates/spa-next-remote-page").deleteDir()
         assert new File("$confFolder/settings/wcm/templates/spa-page-template").deleteDir()
+        assert new File("$confFolder/settings/wcm/templates/spa-remote-page").deleteDir()
 
         // Delete SPA template types
+        assert new File("$confFolder/settings/wcm/template-types/nextjs-page").deleteDir()
         assert new File("$confFolder/settings/wcm/template-types/spa-app").deleteDir()
         assert new File("$confFolder/settings/wcm/template-types/spa-page").deleteDir()
+        assert new File("$confFolder/settings/wcm/template-types/remote-page").deleteDir()
 
         // Delete SPA content
         assert new File("$contentFolder/us/en/home").deleteDir()
