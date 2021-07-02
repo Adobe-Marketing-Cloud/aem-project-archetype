@@ -447,6 +447,7 @@ Bundle-DocURL:
     </build>
 
     <profiles>
+#if ( $aemVersion != "cloud" )
         <!-- ====================================================== -->
         <!-- A D O B E P U B L I C P R O F I L E -->
         <!-- ====================================================== -->
@@ -494,6 +495,7 @@ Bundle-DocURL:
             </pluginRepositories>
         </profile>
 
+#end
         <!-- Development profile: install only the bundle -->
         <profile>
             <id>autoInstallBundle</id>
