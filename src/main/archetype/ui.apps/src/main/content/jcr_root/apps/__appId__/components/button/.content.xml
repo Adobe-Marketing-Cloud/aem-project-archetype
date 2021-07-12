@@ -3,7 +3,7 @@
     jcr:primaryType="cq:Component"
     jcr:title="Button"
 #if ( $includeCommerce == "y" )
-    sling:resourceSuperType="core/cif/components/content/button/v1/button"    
+    sling:resourceSuperType="core/cif/components/content/button/v2/button"    
 #else
     sling:resourceSuperType="core/wcm/components/button/v1/button"
 #end
