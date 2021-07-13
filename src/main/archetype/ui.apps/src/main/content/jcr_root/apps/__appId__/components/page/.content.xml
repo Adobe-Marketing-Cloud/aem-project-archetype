@@ -5,7 +5,7 @@
 #if ( $isSpaProject )
     sling:resourceSuperType="spa-project-core/components/page"
 #elseif ( $includeCommerce == "y" )
-    sling:resourceSuperType="core/cif/components/structure/page/v1/page"
+    sling:resourceSuperType="core/cif/components/structure/page/v2/page"
 #elseif ( $amp == "y" )
     sling:resourceSuperType="core/wcm/extensions/amp/components/page/v1/page"
 #else
