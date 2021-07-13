@@ -5,4 +5,4 @@
     cssProcessor="[default:none,min:none]"
     jsProcessor="[default:none,min:none]"
     categories="[${appId}.cif]" 
-    embed="[core.cif.components.product.v1,core.cif.components.productcarousel.v1,core.cif.components.productcollection.v1,core.cif.components.productteaser.v1,core.cif.components.searchbar.v1,core.cif.components.header.v1,core.cif.components.navigation.v1,core.cif.components.react,core.cif.components.carousel.v1,core.cif.components.categorycarousel.v1,core.cif.components.featuredcategorylist.v1]" />
+    embed="[core.cif.components.product.v1,core.cif.components.productcarousel.v1,core.cif.components.productcollection.v1,core.cif.components.productteaser.v1,core.cif.components.searchbar.v1,core.cif.components.header.v1,core.cif.components.navigation.v2,core.cif.components.react,core.cif.components.carousel.v1,core.cif.components.categorycarousel.v1,core.cif.components.featuredcategorylist.v1]" />
