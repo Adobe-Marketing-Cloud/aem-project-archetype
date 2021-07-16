@@ -3,5 +3,5 @@
     jcr:description="Product List Component"
     jcr:primaryType="cq:Component"
     jcr:title="Product List"
-    sling:resourceSuperType="core/cif/components/commerce/productlist/v1/productlist"
+    sling:resourceSuperType="core/cif/components/commerce/productlist/v2/productlist"
     componentGroup="${appTitle} - Commerce"/>
